@@ -1,6 +1,6 @@
 # React Task Manager App
 
-This is a simple React Task Manager app that allows you to add, complete, and view tasks. It uses functional components and state management to handle tasks.
+This is a simple React Task Manager app that allows you to add, complete, and view tasks using the Domain-Application-Infraestructure layer. It uses functional components and state management to handle tasks.
 
 ## Installation
 
