@@ -20,3 +20,11 @@ export const gettasksNotCompleted = (currentState:Task[]) =>
 
 export const gettasksCompleted = (currentState:Task[]) =>
   currentState.filter((task) => task.completed);
+
+  export const CheckIfItIsEmpty = (description:string) => {
+    if (description == "") {
+      return true; 
+    }
+    return false; 
+  };
+  

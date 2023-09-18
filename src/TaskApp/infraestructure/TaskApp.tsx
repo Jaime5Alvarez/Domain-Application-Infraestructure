@@ -6,6 +6,7 @@ import {
   ChangeTaskState,
   gettasksNotCompleted,
   gettasksCompleted,
+  CheckIfItIsEmpty,
 } from "../application/TaskManager";
 import { Task } from "../../Interfaces";
 export const TaskApp = () => {
@@ -13,6 +14,9 @@ export const TaskApp = () => {
   const [description, setDescription] = useState("");
 
   const addNewTask = () => {
+    if (CheckIfItIsEmpty(description)) {
+      return;
+    }
     setTasks(Addtask(tasks, description));
     setDescription("");
   };
