@@ -1,6 +1,7 @@
 # React Task Manager App
 
-This is a simple React Task Manager app that allows you to add, complete, and view tasks using the Domain-Application-Infraestructure layer. It uses functional components and state management to handle tasks.
+This is a simple React Task Manager app that allows you to add, complete, and view tasks using the Domain-Application-Infraestructure layer. It uses functional componentsm state management to handle tasks,
+and crucrud.com as API.
 
 ## Installation
 
@@ -16,21 +17,17 @@ css
 
 cd <project-directory>
 
-markdown
-
 3. Install the dependencies:
 
 npm install
 
-markdown
+4. Get your REST endpoint from crucrud.com and paste it on urls.ts
 
-4. Start the development server:
+5. Start the development server:
 
 npm start
 
-csharp
-
-5. Open your browser and visit [http://localhost:3000](http://localhost:3000) to use the app.
+6. Open your browser and visit [http://localhost:3000](http://localhost:3000) to use the app.
 
 ## Usage
 

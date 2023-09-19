@@ -1,2 +1,2 @@
-export const API_URL =
-  "  https://crudcrud.com/api/3c642064006e44d7b3b389a290aa3439/tasks";
+export const API_URL = `Paste here your API_URL`;
+// example:  https://crudcrud.com/api/ddeaba8e1e8541a1958abf20f5f122eb/tasks
