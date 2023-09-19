@@ -1,12 +1,9 @@
 import { Task } from "../../Interfaces";
 
-
-export const CreateTask = ({id, description, completed}:Task) => {
-    return {
-    id,
+export const CreateTask = ({ _id, description, completed }: Task) => {
+  return {
+    _id,
     description,
     completed,
-  }
-}
-
-  
+  };
+};
