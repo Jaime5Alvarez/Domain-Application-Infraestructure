@@ -17,7 +17,6 @@ export const TaskApp = () => {
 
   const FetchTasks = async () => {
     try {
-      console.log("FetchTasks");
       const ResponseTasks = await httpRead.GetTasks();
       setTasks(ResponseTasks);
     } catch (error) {
