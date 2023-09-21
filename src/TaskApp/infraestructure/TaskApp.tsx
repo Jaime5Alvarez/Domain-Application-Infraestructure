@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Addtask,
   gettasksNotCompleted,
@@ -77,7 +77,7 @@ export const TaskApp = () => {
       </ul>
 
       <h2>Completed Tasks</h2>
-      <ul>
+      <ul placeholder="Completed tasks">
         {CompletedTasks.map((task: Task) => (
           <li key={`completed-task-${task._id}`}>{task.description}</li>
         ))}
