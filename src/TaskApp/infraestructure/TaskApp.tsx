@@ -67,9 +67,12 @@ export const TaskApp = () => {
       <h2>Pending Tasks</h2>
       <ul>
         {PendingTasks.map((task: Task) => (
-          <li key={`pending-task-${task._id}`}>
+          <li data-testid="pending-task-item" key={`pending-task-${task._id}`}>
             {task.description}{" "}
-            <button onClick={() => task._id && ChangeTaskAsCompleted(task._id)}>
+            <button
+              data-testid={`complete-button-${task._id}`}
+              onClick={() => task._id && ChangeTaskAsCompleted(task._id)}
+            >
               Complete
             </button>
           </li>
@@ -77,9 +80,14 @@ export const TaskApp = () => {
       </ul>
 
       <h2>Completed Tasks</h2>
-      <ul placeholder="Completed tasks">
+      <ul>
         {CompletedTasks.map((task: Task) => (
-          <li key={`completed-task-${task._id}`}>{task.description}</li>
+          <li
+            data-testid="completed-task-list"
+            key={`completed-task-${task._id}`}
+          >
+            {task.description}
+          </li>
         ))}
       </ul>
     </div>
