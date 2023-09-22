@@ -83,7 +83,7 @@ export const TaskApp = () => {
       <ul>
         {CompletedTasks.map((task: Task) => (
           <li
-            data-testid="completed-task-list"
+            data-testid="completed-task-item"
             key={`completed-task-${task._id}`}
           >
             {task.description}

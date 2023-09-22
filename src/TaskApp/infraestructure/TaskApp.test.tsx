@@ -48,6 +48,11 @@ describe("Task app tests", () => {
         description: `${expectedCreatedTaskDescription}-eqwwqw`,
         completed: false,
       },
+      {
+        _id: "dadadsdsdsdsass",
+        description: `${expectedCreatedTaskDescription}-eqwdwddwqw`,
+        completed: true,
+      },
     ]);
     component = render(<TaskApp />);
   });
@@ -57,6 +62,13 @@ describe("Task app tests", () => {
       const pendingTasks = component.getAllByTestId("pending-task-item");
 
       expect(pendingTasks).toHaveLength(2);
+      expect(httpRead.GetTasks).toHaveBeenCalledTimes(1);
+    });
+  });
+  it("Should get all the completed tasks in the first render", async () => {
+    await waitFor(() => {
+      const completedTasks = component.getAllByTestId("completed-task-item");
+      expect(completedTasks).toHaveLength(1);
       expect(httpRead.GetTasks).toHaveBeenCalledTimes(1);
     });
   });
@@ -99,7 +111,7 @@ describe("Task app tests", () => {
     fireEvent.click(completeButton);
     //then
     await waitFor(() => {
-      const CompletedTaskList = component.getAllByTestId("completed-task-list");
+      const CompletedTaskList = component.getAllByTestId("completed-task-item");
       expect(CompletedTaskList).toHaveLength(1);
     });
   });
