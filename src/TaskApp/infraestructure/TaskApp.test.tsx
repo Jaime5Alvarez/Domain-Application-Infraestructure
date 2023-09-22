@@ -125,6 +125,7 @@ describe("Task app tests", () => {
 });
 
 describe("TaskItem tests", () => {
+  const expectedCreatedTaskDescription = "New task";
   let component: RenderResult<
     typeof import("@testing-library/dom/types/queries"),
     HTMLElement,
@@ -132,11 +133,12 @@ describe("TaskItem tests", () => {
   >;
   beforeEach(() => {
     component = render(
-      <TaskItem _id="sdsdsd" description="New task created" />
+      <TaskItem _id="sdsdsd" description={expectedCreatedTaskDescription} />
     );
   });
   it("should render a task item", () => {
     const completedItem = component.getByTestId("completed-task-item");
     expect(completedItem).toBeInTheDocument();
+    expect(completedItem).toHaveTextContent(expectedCreatedTaskDescription);
   });
 });
