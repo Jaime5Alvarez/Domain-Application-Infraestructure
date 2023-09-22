@@ -82,14 +82,25 @@ export const TaskApp = () => {
       <h2>Completed Tasks</h2>
       <ul>
         {CompletedTasks.map((task: Task) => (
-          <li
-            data-testid="completed-task-item"
-            key={`completed-task-${task._id}`}
-          >
-            {task.description}
-          </li>
+          <TaskItem _id={task._id} description={task.description} />
         ))}
       </ul>
     </div>
+  );
+};
+
+export const TaskItem = ({
+  _id,
+  description,
+}: {
+  _id?: string;
+  description: string;
+}) => {
+  return (
+    <>
+      <li data-testid={`completed-task-item`} key={`completed-task-${_id}`}>
+        {description}
+      </li>
+    </>
   );
 };

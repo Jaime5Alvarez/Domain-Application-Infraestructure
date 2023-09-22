@@ -8,7 +8,7 @@ import {
   render,
   waitFor,
 } from "@testing-library/react";
-import { TaskApp } from "./TaskApp";
+import { TaskApp, TaskItem } from "./TaskApp";
 import { httpUpdate } from "./http/update";
 import { httpRead } from "./http/read";
 
@@ -17,7 +17,9 @@ jest.mock("./http/read");
 jest.mock("./http/update");
 describe("Task app tests", () => {
   const expectedPendingTaskId = "pending-task-id-2323-324";
-  const expectedCreatedTaskDescription = "New task created";
+  const expectedCompletedTaskId = "completed-task-id-33323-323";
+
+  const expectedCreatedTaskDescription = "New task";
   const updatedTaskDescription = "New task Updated";
 
   let component: RenderResult<
@@ -49,8 +51,13 @@ describe("Task app tests", () => {
         completed: false,
       },
       {
-        _id: "dadadsdsdsdsass",
+        _id: expectedCompletedTaskId,
         description: `${expectedCreatedTaskDescription}-eqwdwddwqw`,
+        completed: true,
+      },
+      {
+        _id: "ewedwewewew",
+        description: `${expectedCreatedTaskDescription}-eqwdwewewddwqw`,
         completed: true,
       },
     ]);
@@ -68,7 +75,7 @@ describe("Task app tests", () => {
   it("Should get all the completed tasks in the first render", async () => {
     await waitFor(() => {
       const completedTasks = component.getAllByTestId("completed-task-item");
-      expect(completedTasks).toHaveLength(1);
+      expect(completedTasks).toHaveLength(2);
       expect(httpRead.GetTasks).toHaveBeenCalledTimes(1);
     });
   });
@@ -112,7 +119,24 @@ describe("Task app tests", () => {
     //then
     await waitFor(() => {
       const CompletedTaskList = component.getAllByTestId("completed-task-item");
-      expect(CompletedTaskList).toHaveLength(1);
+      expect(CompletedTaskList).toHaveLength(2);
     });
+  });
+});
+
+describe("TaskItem tests", () => {
+  let component: RenderResult<
+    typeof import("@testing-library/dom/types/queries"),
+    HTMLElement,
+    HTMLElement
+  >;
+  beforeEach(() => {
+    component = render(
+      <TaskItem _id="sdsdsd" description="New task created" />
+    );
+  });
+  it("should render a task item", () => {
+    const completedItem = component.getByTestId("completed-task-item");
+    expect(completedItem).toBeInTheDocument();
   });
 });
