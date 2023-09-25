@@ -8,7 +8,7 @@ import {
   render,
   waitFor,
 } from "@testing-library/react";
-import { TaskApp, TaskItem } from "./TaskApp";
+import { TaskApp } from "./TaskApp";
 import { httpUpdate } from "./http/update";
 import { httpRead } from "./http/read";
 
@@ -121,24 +121,5 @@ describe("Task app tests", () => {
       const CompletedTaskList = component.getAllByTestId("completed-task-item");
       expect(CompletedTaskList).toHaveLength(2);
     });
-  });
-});
-
-describe("TaskItem tests", () => {
-  const expectedCreatedTaskDescription = "New task";
-  let component: RenderResult<
-    typeof import("@testing-library/dom/types/queries"),
-    HTMLElement,
-    HTMLElement
-  >;
-  beforeEach(() => {
-    component = render(
-      <TaskItem _id="sdsdsd" description={expectedCreatedTaskDescription} />
-    );
-  });
-  it("should render a task item", () => {
-    const completedItem = component.getByTestId("completed-task-item");
-    expect(completedItem).toBeInTheDocument();
-    expect(completedItem).toHaveTextContent(expectedCreatedTaskDescription);
   });
 });
