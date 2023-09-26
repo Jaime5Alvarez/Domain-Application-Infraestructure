@@ -1,5 +1,7 @@
 import { CreateTask } from "../domain/Tarea";
 import { Task } from "../../Interfaces";
+import { Dispatch, SetStateAction } from "react";
+import { httpUpdate } from "../infraestructure/http/update";
 
 export const Addtask = (description: string) => {
   const NewTask = CreateTask({
@@ -30,4 +32,23 @@ export const CheckIfItIsEmpty = (description: string) => {
     return true;
   }
   return false;
+};
+
+export const useChangeTaskAsCompleted = async (
+  _id: string,
+  tasks: Task[],
+  setTasks: Dispatch<SetStateAction<Task[]>>
+) => {
+  const NewTask = ChangeTaskState(tasks, _id);
+  if (NewTask) {
+    await httpUpdate.UpdateTask(NewTask);
+
+    const updatedList = tasks.map((task) => {
+      if (task._id === _id) {
+        return { ...NewTask };
+      }
+      return task;
+    });
+    setTasks(updatedList);
+  }
 };

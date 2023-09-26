@@ -4,6 +4,7 @@ import { httpCreate } from "./http/create";
 // import { httpUpdate } from "./http/update";
 import {
   RenderResult,
+  act,
   fireEvent,
   render,
   waitFor,
@@ -27,11 +28,11 @@ describe("Task app tests", () => {
     HTMLElement,
     HTMLElement
   >;
-  beforeEach(() => {
+  beforeEach(async () => {
     // given
     (httpCreate.CreateTask as jest.Mock).mockResolvedValue({
-      _id: "sdsdsd",
-      description: expectedCreatedTaskDescription,
+      _id: "sdsdsddededd",
+      description: `${expectedCreatedTaskDescription}-new`,
       completed: false,
     });
     (httpUpdate.UpdateTask as jest.Mock).mockResolvedValue({
@@ -61,7 +62,7 @@ describe("Task app tests", () => {
         completed: true,
       },
     ]);
-    component = render(<TaskApp />);
+    component = await act(async () => render(<TaskApp />));
   });
   afterEach(() => jest.clearAllMocks());
   it("Should get all the pending tasks in the first render", async () => {
@@ -97,7 +98,9 @@ describe("Task app tests", () => {
     const addButton = component.getByText("Add");
     fireEvent.click(addButton);
     await waitFor(() => {
-      const newTask = component.queryByText(expectedCreatedTaskDescription);
+      const newTask = component.queryByText(
+        `${expectedCreatedTaskDescription}-new`
+      );
       expect(newTask).toBeNull();
       expect(httpCreate.CreateTask).not.toHaveBeenCalled();
     });
@@ -113,13 +116,53 @@ describe("Task app tests", () => {
     fireEvent.click(buttonAdd);
 
     const completeButton = component.getByTestId(
-      `complete-button-${expectedPendingTaskId}`
+      `change-state-button-${expectedPendingTaskId}`
     );
     fireEvent.click(completeButton);
     //then
     await waitFor(() => {
       const CompletedTaskList = component.getAllByTestId("completed-task-item");
       expect(CompletedTaskList).toHaveLength(2);
+    });
+  });
+  it("Should be rendered task item component when there are pending items available", () => {
+    (httpRead.GetTasks as jest.Mock).mockResolvedValue([
+      {
+        _id: expectedPendingTaskId,
+        description: expectedCreatedTaskDescription,
+        completed: false,
+      },
+      {
+        _id: "dadasass",
+        description: `${expectedCreatedTaskDescription}-eqwwqw`,
+        completed: false,
+      },
+    ]);
+    expect(component.getAllByTestId("pending-task-item")).toHaveLength(2);
+  });
+  it("Should be rendered task item component when there are completed items available", () => {
+    (httpRead.GetTasks as jest.Mock).mockResolvedValue([
+      {
+        _id: expectedPendingTaskId,
+        description: expectedCreatedTaskDescription,
+        completed: true,
+      },
+      {
+        _id: "dadasass",
+        description: `${expectedCreatedTaskDescription}-eqwwqw`,
+        completed: true,
+      },
+    ]);
+    expect(component.getAllByTestId("completed-task-item")).toHaveLength(2);
+  });
+  it("Should change a task to the pending list when clicking if it is available at completed list", async () => {
+    const changeStateButton = component.getByTestId(
+      `change-state-button-${expectedCompletedTaskId}`
+    );
+    fireEvent.click(changeStateButton);
+    await waitFor(() => {
+      const pendingTaskList = component.getAllByTestId("pending-task-item");
+      expect(pendingTaskList).toHaveLength(3);
     });
   });
 });

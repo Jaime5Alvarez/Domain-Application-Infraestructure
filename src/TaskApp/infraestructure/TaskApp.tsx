@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, Dispatch, SetStateAction, useState } from "react";
 import {
   Addtask,
   gettasksNotCompleted,
   gettasksCompleted,
   CheckIfItIsEmpty,
-  ChangeTaskState,
+  useChangeTaskAsCompleted,
 } from "../application/TaskManager";
 import { Task } from "../../Interfaces";
 import { httpCreate } from "./http/create";
 import { httpRead } from "./http/read";
-import { httpUpdate } from "./http/update";
 
 export const TaskApp = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -33,20 +32,6 @@ export const TaskApp = () => {
     setDescription("");
   };
 
-  const ChangeTaskAsCompleted = async (_id: string) => {
-    const NewTask = ChangeTaskState(tasks, _id);
-    if (NewTask) {
-      await httpUpdate.UpdateTask(NewTask);
-
-      const updatedList = tasks.map((task: Task) => {
-        if (task._id === _id) {
-          return { ...NewTask };
-        }
-        return task;
-      });
-      setTasks(updatedList);
-    }
-  };
   const PendingTasks = gettasksNotCompleted(tasks);
   const CompletedTasks = gettasksCompleted(tasks);
   useEffect(() => {
@@ -67,14 +52,14 @@ export const TaskApp = () => {
       <h2>Pending Tasks</h2>
       <ul>
         {PendingTasks.map((task: Task) => (
-          <li data-testid="pending-task-item" key={`pending-task-${task._id}`}>
-            {task.description}{" "}
-            <button
-              data-testid={`complete-button-${task._id}`}
-              onClick={() => task._id && ChangeTaskAsCompleted(task._id)}
-            >
-              Complete
-            </button>
+          <li key={task._id}>
+            <TaskItem
+              _id={task._id}
+              description={task.description}
+              type={"pending"}
+              tasks={tasks}
+              setTasks={setTasks}
+            />
           </li>
         ))}
       </ul>
@@ -82,7 +67,15 @@ export const TaskApp = () => {
       <h2>Completed Tasks</h2>
       <ul>
         {CompletedTasks.map((task: Task) => (
-          <TaskItem _id={task._id} description={task.description} />
+          <li key={task._id}>
+            <TaskItem
+              type={"completed"}
+              _id={task._id}
+              description={task.description}
+              tasks={tasks}
+              setTasks={setTasks}
+            />
+          </li>
         ))}
       </ul>
     </div>
@@ -92,15 +85,27 @@ export const TaskApp = () => {
 export const TaskItem = ({
   _id,
   description,
+  type,
+  tasks,
+  setTasks,
 }: {
   _id?: string;
   description: string;
+  type: string;
+  tasks: Task[];
+  setTasks: Dispatch<SetStateAction<Task[]>>;
 }) => {
   return (
     <>
-      <li data-testid={`completed-task-item`} key={`completed-task-${_id}`}>
+      <span data-testid={`${type}-task-item`}>
         {description}
-      </li>
+        <button
+          data-testid={`change-state-button-${_id}`}
+          onClick={() => _id && useChangeTaskAsCompleted(_id, tasks, setTasks)}
+        >
+          {type == "pending" ? "Complete" : "Undo"}
+        </button>
+      </span>
     </>
   );
 };
